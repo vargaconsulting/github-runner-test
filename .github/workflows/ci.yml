@@ -1,25 +1,32 @@
-name: Test Self-Hosted Runner
-
+name: CI
 on:
-  workflow_dispatch:  # manual trigger
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
-    runs-on: saturn
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04, debian-12]
+        compiler: [
+          gcc-10, gcc-11, gcc-12, gcc-13, gcc-14, gcc-15,
+          clang-14, clang-15, clang-16, clang-17, clang-18, clang-19, clang-20
+        ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install build tools
+      - name: Run build inside container
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake
+          podman run --rm --userns=keep-id -v /var/github:/var/github ci-${{ matrix.os }} bash -c "
+              echo 'Running inside container: ${{ matrix.os }} + ${{ matrix.compiler }}';
+              lsb_release -a;
+              # Add compiler detection or build logic here
+            "
 
-      - name: Configure
-        run: cmake -S . -B build
-
-      - name: Build
-        run: cmake --build build -- -j$(nproc)
-
-      - name: Run program
-        run: ./build/runner_test

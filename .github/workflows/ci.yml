@@ -12,11 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04, debian-12]
-        compiler: [
-          gcc-10, gcc-11, gcc-12, gcc-13, gcc-14, gcc-15,
-          clang-14, clang-15, clang-16, clang-17, clang-18, clang-19, clang-20
-        ]
+        os: [ ubuntu-22.04, ubuntu-22.04 ]
+        compiler: [ gcc-10, gcc-11, gcc-12, gcc-13, clang-14, clang-15, clang-16, clang-17, clang-18 ]
 
     steps:
       - name: Checkout
@@ -24,9 +21,23 @@ jobs:
 
       - name: Run build inside container
         run: |
-          podman run --rm --userns=keep-id -v /var/github:/var/github ci-${{ matrix.os }} bash -c "
-              echo 'Running inside container: ${{ matrix.os }} + ${{ matrix.compiler }}';
-              lsb_release -a;
-              # Add compiler detection or build logic here
-            "
+          podman run --rm --userns=keep-id \
+            -v /var/github:/var/github \
+            ci-${{ matrix.os }} bash -c '
+              set -e
+              echo "Running inside container: ${{ matrix.os }} + ${{ matrix.compiler }}"
+              cd ${{ github.workspace }}
 
+              compiler=${{ matrix.compiler }}
+              if [[ $compiler == gcc-* ]]; then
+                export CC=$compiler
+                export CXX=g++-${compiler#gcc-}
+              elif [[ $compiler == clang-* ]]; then
+                export CC=$compiler
+                export CXX=clang++-${compiler#clang-}
+              fi
+
+              cmake -B build -DCMAKE_CXX_COMPILER=$CXX
+              cmake --build build -- -j$(nproc)
+              ls build/*
+          '

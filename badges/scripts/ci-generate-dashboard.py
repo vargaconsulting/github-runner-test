@@ -59,19 +59,25 @@ def generate_svg(theme):
     # Background
     svg.append(f'<rect x="0" y="0" width="100%" height="100%" fill="{bg_color}" />')
 
+    # Global top label
+    svg.append(
+        f'<text x="{row_label_w/2}" y="{header_h - 10}" '
+        f'font-size="14" text-anchor="middle" font-weight="700" fill="{text_color}">Compiler/OS</text>'
+    )
+
     # Column headers
     for j, comp in enumerate(compilers):
         x = row_label_w + j * (cell_w + gap) + cell_w // 2
         y = header_h - 10
         svg.append(
-            f'<text x="{x}" y="{y}" transform="rotate(-45,{x},{y})" font-size="12" fill="{text_color}">{comp}</text>'
+            f'<text x="{x}" y="{y}" transform="rotate(-45,{x},{y})" font-size="14" font-weight="700" fill="{text_color}">{comp}</text>'
         )
 
     # Row headers
     for i, os in enumerate(oses):
-        y = header_h + i * (cell_h + gap) + cell_h // 2 + 5
+        y = header_h + i * (cell_h + gap) + cell_h // 2 + 10
         svg.append(
-            f'<text x="{row_label_w - gap}" y="{y}" font-size="14" text-anchor="end" fill="{text_color}">{os}</text>'
+            f'<text x="{row_label_w - gap - 5}" y="{y}" font-size="14" text-anchor="end" font-weight="700" fill="{text_color}">{os}</text>'
         )
 
     # Grid cells
@@ -83,11 +89,11 @@ def generate_svg(theme):
             y = header_h + i * (cell_h + gap)
             svg.append(
                 f'<rect x="{x}" y="{y}" width="{cell_w}" height="{cell_h}" '
-                f'rx="6" ry="6" fill="{color}" fill-opacity="0.3" stroke="{stroke_color}"/>'
+                f'rx="5" ry="5" fill="{color}" fill-opacity="0.5" stroke="{stroke_color}"/>'
             )
             svg.append(
                 f'<text x="{x + cell_w/2}" y="{y + cell_h/2 + 5}" '
-                f'text-anchor="middle" font-size="18" fill="{text_color}">{symbol}</text>'
+                f'text-anchor="middle" font-size="21" fill="{text_color}">{symbol}</text>'
             )
 
     svg.append("</svg>")
@@ -96,4 +102,4 @@ def generate_svg(theme):
 # Write both versions
 Path("dashboard-light.svg").write_text(generate_svg("light"))
 Path("dashboard-dark.svg").write_text(generate_svg("dark"))
-print("✅ Generated dashboard-light.svg and dashboard-dark.svg")
+print("Generated dashboard-light.svg and dashboard-dark.svg")

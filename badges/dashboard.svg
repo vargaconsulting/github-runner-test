@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="230" font-family="monospace">
+<text x="180" y="70" transform="rotate(-45,180,70)" font-size="12">clang-14</text>
+<text x="240" y="70" transform="rotate(-45,240,70)" font-size="12">clang-15</text>
+<text x="300" y="70" transform="rotate(-45,300,70)" font-size="12">clang-16</text>
+<text x="360" y="70" transform="rotate(-45,360,70)" font-size="12">clang-17</text>
+<text x="420" y="70" transform="rotate(-45,420,70)" font-size="12">clang-18</text>
+<text x="480" y="70" transform="rotate(-45,480,70)" font-size="12">gcc-10</text>
+<text x="540" y="70" transform="rotate(-45,540,70)" font-size="12">gcc-11</text>
+<text x="600" y="70" transform="rotate(-45,600,70)" font-size="12">gcc-12</text>
+<text x="660" y="70" transform="rotate(-45,660,70)" font-size="12">gcc-13</text>
+<text x="720" y="70" transform="rotate(-45,720,70)" font-size="12">icx</text>
+<text x="10" y="125" font-size="14">ubuntu-22.04</text>
+<text x="10" y="165" font-size="14">ubuntu-24.04</text>
+<rect x="150" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="180.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="210" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="240.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="270" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="300.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="330" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="360.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="390" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="420.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="450" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="480.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="510" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="540.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="570" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="600.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="630" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="660.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="690" y="100" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="720.0" y="125.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="150" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="180.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="210" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="240.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="270" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="300.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="330" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="360.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="390" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="420.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="450" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="480.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="510" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="540.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="570" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="600.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="630" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="660.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+<rect x="690" y="140" width="60" height="40" fill="green" fill-opacity="0.3" stroke="black"/>
+<text x="720.0" y="165.0" text-anchor="middle" font-size="18">✔</text>
+</svg>

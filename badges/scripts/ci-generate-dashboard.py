@@ -24,10 +24,11 @@ oses = sorted(oses)
 compilers = sorted(compilers)
 
 # SVG layout parameters
-cell_w, cell_h = 60, 40
+gap = 5  # space between cells
+cell_w, cell_h = 25, 25
 header_h = 100
-row_label_w = 150
-svg_w = row_label_w + len(compilers) * cell_w + 50
+row_label_w = 120
+svg_w = row_label_w + len(compilers) * cell_w + 80
 svg_h = header_h + len(oses) * cell_h + 50
 
 def status_color_symbol(status):
@@ -43,29 +44,31 @@ svg = [
     f'<svg xmlns="http://www.w3.org/2000/svg" width="{svg_w}" height="{svg_h}" font-family="monospace">'
 ]
 
-# Column headers (rotated -45° for readability)
+# Column headers (rotated -45° for readability, aligned with gap)
 for j, comp in enumerate(compilers):
-    x = row_label_w + j * cell_w + cell_w // 2
-    y = header_h - 30
+    x = row_label_w + j * (cell_w + gap) + cell_w // 2
+    y = header_h - 10
     svg.append(
         f'<text x="{x}" y="{y}" transform="rotate(-45,{x},{y})" font-size="12">{comp}</text>'
     )
 
-# Row headers
+# Row headers (align OS labels right before the grid)
 for i, os in enumerate(oses):
-    y = header_h + i * cell_h + cell_h // 2 + 5
-    svg.append(f'<text x="10" y="{y}" font-size="14">{os}</text>')
+    y = header_h + i * (cell_h + gap) + cell_h // 2 + 5
+    svg.append(
+        f'<text x="{row_label_w - gap}" y="{y}" font-size="14" text-anchor="end">{os}</text>'
+    )
 
 # Grid cells
 for i, os in enumerate(oses):
     for j, comp in enumerate(compilers):
         status = matrix.get((os, comp), "skipped")
         color, symbol = status_color_symbol(status)
-        x = row_label_w + j * cell_w
-        y = header_h + i * cell_h
+        x = row_label_w + j * (cell_w + gap)
+        y = header_h + i * (cell_h + gap)
         svg.append(
             f'<rect x="{x}" y="{y}" width="{cell_w}" height="{cell_h}" '
-            f'fill="{color}" fill-opacity="0.3" stroke="black"/>'
+            f'rx="6" ry="6" fill="{color}" fill-opacity="0.3" stroke="black"/>'
         )
         svg.append(
             f'<text x="{x + cell_w/2}" y="{y + cell_h/2 + 5}" '

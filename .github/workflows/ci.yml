@@ -13,15 +13,32 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-22.04, ubuntu-24.04 ]
-        compiler: [ gcc-10, gcc-11, gcc-12, gcc-13, clang-14, clang-15, clang-16, clang-17, clang-18, icx]
+        compiler: [ gcc-10, gcc-11, gcc-12, gcc-13, clang-14, clang-15, clang-16, clang-17, clang-18, icx ]
 
     steps:
+      - name: Check skip list
+        id: skip_check
+        run: |
+          skip_list=(
+          )
+
+          combo="${{ matrix.os }}:${{ matrix.compiler }}"
+          echo "Checking combination: $combo"
+          for skip in "${skip_list[@]}"; do
+            if [[ "$combo" == "$skip" ]]; then
+              echo "SKIP_COMPILE=true" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done
+          echo "SKIP_COMPILE=false" >> "$GITHUB_ENV"
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Run build inside container
+        if: env.SKIP_COMPILE == 'false'
         run: |
           env | grep '^GITHUB_' > github.env
           podman run --env-file github.env --rm --userns=keep-id -v /var/github:/var/github ci-${{ matrix.os }} bash -c '
@@ -48,15 +65,21 @@ jobs:
               build/runner_test
               echo "||" $GITHUB_RUN_NUMBER $GITHUB_RUN_ID $GITHUB_REPOSITORY_ID "||"
           '
+
       - name: Record Badge Status
         if: always()
         run: |
           mkdir -p badge-status
+          if [[ "$SKIP_COMPILE" == "true" ]]; then
+            status="skipped"
+          else
+            status="${{ job.status }}"
+          fi
           cat <<EOF > badge-status/status-${{ matrix.os }}-${{ matrix.compiler }}.json
           {
             "os": "${{ matrix.os }}",
             "compiler": "${{ matrix.compiler }}",
-            "status": "${{ job.status }}"
+            "status": "$status"
           }
           EOF
 
@@ -67,7 +90,7 @@ jobs:
           name: status-${{ matrix.os }}-${{ matrix.compiler }}
           path: badge-status/status-${{ matrix.os }}-${{ matrix.compiler }}.json
           overwrite: true
-          
+
   generate-dashboard:
     name: Generate unified dashboard
     runs-on: ubuntu-latest

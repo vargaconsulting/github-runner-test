@@ -1,0 +1,44 @@
+# ----------------------------------------------------------------------
+# Fedora 41 base image
+FROM fedora:41
+
+ENV FEDORA_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# ----------------------------------------------------------------------
+# Base toolchain & build deps
+RUN dnf -y update && dnf -y install --setopt=install_weak_deps=False \
+    gcc gcc-c++ gcc-gfortran \
+    clang lld llvm-devel \
+    libcxx libcxx-devel libcxxabi libcxxabi-devel \
+    cmake ninja-build \
+    git curl wget ca-certificates \
+    python3 python3-pip \
+    vim tar \
+    xz xz-devel \
+    bzip2 bzip2-devel \
+    zstd libzstd-devel \
+    unzip \
+    libarchive \
+    gawk \
+    m4 \
+    autoconf \
+    automake \
+    libtool \
+    texinfo \
+    gperf \
+    pkgconf-pkg-config \
+    gmp-devel \
+    mpfr-devel \
+    libmpc-devel \
+    ncurses-devel \
+    libxml2 libxml2-devel \
+    zlib-devel \
+ && dnf clean all && rm -rf /var/cache/dnf
+
+
+WORKDIR /var/github/tmp/fedora-41
+
+# podman build -t ci-fedora-41 -f docker-files/fedora-41.docker .
+# podman run -it --rm --userns=keep-id -v /var/github:/var/github ci-fedora-41 bash

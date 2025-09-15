@@ -1,0 +1,86 @@
+FROM ubuntu:22.04
+ENV DEBIAN_FRONTEND=noninteractive
+
+# ----------------------------------------------------------------------
+# Base setup: GCC Toolchain PPA + LLVM upstream repos
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    software-properties-common gnupg wget curl ca-certificates lsb-release \
+ && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
+ \
+ # Add official LLVM repos for Clang 14–18
+ && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
+ && echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main" >> /etc/apt/sources.list.d/llvm.list \
+ && echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main" >> /etc/apt/sources.list.d/llvm.list \
+ && echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main" >> /etc/apt/sources.list.d/llvm.list \
+ && echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main" >> /etc/apt/sources.list.d/llvm.list \
+ && echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main" >> /etc/apt/sources.list.d/llvm.list \
+ && apt-get update
+
+# ----------------------------------------------------------------------
+# Install system toolchain + build deps Spack would otherwise try to rebuild
+RUN apt-get install -y --no-install-recommends \
+    # Base toolchain
+    build-essential \
+    gfortran \
+    cmake \
+    ninja-build \
+    git \
+    vim \
+    tar \
+    python3 \
+    \
+    # Compression / archive tools
+    xz-utils liblzma-dev \
+    bzip2 libbz2-dev \
+    zstd libzstd-dev \
+    unzip \
+    \
+    # Build helpers
+    gawk \
+    m4 \
+    autoconf \
+    automake \
+    libtool \
+    texinfo \
+    gperf \
+    pkg-config \
+    \
+    # Math libs for GCC/LLVM bootstrap
+    libgmp-dev \
+    libmpfr-dev \
+    libmpc-dev \
+    \
+    # Terminal + XML
+    libncurses-dev \
+    libxml2 libxml2-dev \
+    \
+    # zlib
+    zlib1g-dev \
+    \
+    # ---- GCC versions (Ubuntu 22.04 + Toolchain PPA) ----
+    gcc-10 g++-10 \
+    gcc-11 g++-11 \
+    gcc-12 g++-12 \
+    gcc-13 g++-13 \
+    \
+    # ---- LLVM/Clang versions (from apt.llvm.org) ----
+    clang-14 lld-14 \
+    clang-15 lld-15 \
+    clang-16 lld-16 \
+    clang-17 lld-17 \
+    clang-18 lld-18 \
+ && rm -rf /var/lib/apt/lists/*
+
+# ----------------------------------------------------------------------
+# Prepare working directory
+WORKDIR /var/github/tmp/ubuntu-22.04
+
+# Environment tweaks for Spack inside container
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Pre-install bsdtar to avoid tar overlayfs issues
+RUN apt-get update && apt-get install -y libarchive-tools && rm -rf /var/lib/apt/lists/*
+
+# podman build -t ci-ubuntu22.04 -f docker-files/ubuntu-22.04.docker .
+# podman run -it --rm --userns=keep-id -v /var/github:/var/github ci-ubuntu22.04 bash

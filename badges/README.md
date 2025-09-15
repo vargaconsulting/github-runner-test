@@ -9,9 +9,9 @@ The table is generated dynamically from JSON job results (`badge-status/*.json`)
 ##  Dashboard
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="badges/dashboard-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="badges/dashboard-light.svg">
-  <img alt="Compiler/OS Matrix" src="badges/dashboard-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/vargaconsulting/github-runner-test/gh-pages/badges/dashboard-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/vargaconsulting/github-runner-test/gh-pages/badges/dashboard-light.svg">
+  <img alt="Compiler/OS Matrix" src="https://raw.githubusercontent.com/vargaconsulting/github-runner-test/gh-pages/badges/dashboard-light.svg">
 </picture>
 
 ## 🚀 Usage

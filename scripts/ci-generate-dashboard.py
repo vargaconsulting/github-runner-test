@@ -57,7 +57,7 @@ def generate_svg(theme):
     ]
 
     # Background
-    svg.append(f'<rect x="0" y="0" width="100%" height="100%" fill="{bg_color}" />')
+    svg.append(f'<rect x="0" y="0" width="100%" height="100%" fill="none" />')
 
     # Global top label
     svg.append(

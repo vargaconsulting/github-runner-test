@@ -13,17 +13,18 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-22.04, ubuntu-22.04 ]
-        compiler: [ gcc-10, gcc-11, gcc-12, gcc-13, clang-14, clang-15, clang-16, clang-17, clang-18 ]
+        compiler: [ gcc-10, gcc-11, gcc-12, gcc-13, clang-14, clang-15, clang-16, clang-17, clang-18, icx]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run build inside container
         run: |
-          podman run --rm --userns=keep-id \
-            -v /var/github:/var/github \
-            ci-${{ matrix.os }} bash -c '
+          env | grep '^GITHUB_' > github.env
+          podman run --env-file github.env --rm --userns=keep-id -v /var/github:/var/github ci-${{ matrix.os }} bash -c '
               set -e
               echo "Running inside container: ${{ matrix.os }} + ${{ matrix.compiler }}"
               cd ${{ github.workspace }}
@@ -35,9 +36,17 @@ jobs:
               elif [[ $compiler == clang-* ]]; then
                 export CC=$compiler
                 export CXX=clang++-${compiler#clang-}
+              elif [[ $compiler == icx ]]; then
+                # Load Intel oneAPI environment
+                source /opt/intel/oneapi/setvars.sh > /dev/null
+                export CC=icx
+                export CXX=icpx
               fi
 
               cmake -B build -DCMAKE_CXX_COMPILER=$CXX
               cmake --build build -- -j$(nproc)
-              ls build/*
+              build/runner_test
+              echo "||" $GITHUB_RUN_NUMBER $GITHUB_RUN_ID $GITHUB_REPOSITORY_ID "||"
           '
+      - name: Run build inside container
+        run: echo ">> $GITHUB_RUN_NUMBER $GITHUB_RUN_ID $GITHUB_REPOSITORY_ID <<"

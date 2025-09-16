@@ -1,5 +1,5 @@
 {
   "os": "ubuntu-24.04",
   "compiler": "gcc-12",
-  "status": "success"
+  "status": "failure"
 }

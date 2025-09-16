@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-22.04, ubuntu-24.04 ]
-        compiler: [ gcc-10, gcc-11, gcc-12, gcc-13, gcc-14,
+        compiler: [ gcc-10, gcc-11, gcc-12, gcc-13, gcc-14, gcc-15,
                   clang-14, clang-15, clang-16, clang-17, clang-18, clang-19, clang-20, icx ]
 
     steps:
@@ -22,6 +22,8 @@ jobs:
         run: |
           skip_list=(
             "ubuntu-22.04:gcc-14"
+            "ubuntu-22.04:gcc-15"
+            "ubuntu-24.04:gcc-15"
           )
 
           combo="${{ matrix.os }}:${{ matrix.compiler }}"
@@ -43,7 +45,8 @@ jobs:
         if: env.SKIP_COMPILE == 'false'
         run: |
           env | grep '^GITHUB_' > github.env
-          podman run --env-file github.env --rm --userns=keep-id -v /var/github:/var/github ci-${{ matrix.os }} bash -c '
+          podman run --env-file github.env --rm -v /var/github:/var/github ci-${{ matrix.os }} bash -c '
+              apt-get update && apt-get install -y libhdf5-dev
               set -e
               echo "Running inside container: ${{ matrix.os }} + ${{ matrix.compiler }}"
               cd ${{ github.workspace }}

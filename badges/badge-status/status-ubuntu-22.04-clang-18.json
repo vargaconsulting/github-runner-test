@@ -1,5 +1,5 @@
 {
   "os": "ubuntu-22.04",
   "compiler": "clang-18",
-  "status": "failure"
+  "status": "success"
 }
